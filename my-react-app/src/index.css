@@ -1,0 +1,29 @@
+*{
+  font-family: Arial, Helvetica, sans-serif;
+  box-sizing: border-box;
+}
+
+.Hook-counter {
+  text-align: center;
+  border: 5px solid black;
+  margin: 10px;
+  padding: 15px 10px;
+}
+
+.Hook-counter p {
+  font-size: 50px;
+}
+
+.Hook-counter button {
+  font-size: 30px;
+  margin: 10px;
+  padding: 5px 10px;
+  border: 0px none;
+  background-color: hsl(34, 78%, 91%);
+  border-radius: 5%;
+}
+
+.Hook-counter button:hover {
+  cursor: pointer;
+  background-color: hsl(34, 78%, 81%);
+}
