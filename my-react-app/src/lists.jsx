@@ -1,38 +1,28 @@
+function Mylist({items = []}) {
+    const sortedItems = items.sort((a, b) => a.name.localeCompare(b.name));
 
-
-function Mylist() {
-    const data = [
-        {id: 1, name:"Lefteris" , age: 20, ishuman: true},
-        {id: 2, name:"Rex" , age: 12, ishuman: false},
-        {id: 3, name:"Alex" , age: 19, ishuman: true},
-    ]
-
-    data.sort((a, b) => a.name.localeCompare(b.name))
-
-    const listnames = data.map(d =>  
+    const listnames = sortedItems.map(d =>  
         <li key={d.id}>
             name: {d.name} age: {d.age} ishuman: {d.ishuman ? "Yes" : "No"}
         </li>
     );
 
-    const adultsage = data.filter(a => a.age >= 18);
+    const humans = sortedItems
+        .filter(a => a.ishuman)
+        .map(d =>  
+            <li key={d.id}>
+                name: {d.name} age: {d.age} ishuman: Yes
+            </li>
+        );
 
-    const listadults = adultsage.map(d =>  
-        <li key={d.id}>
-            name: {d.name} age: {d.age} ishuman: {d.ishuman ? "Yes" : "No"}
-        </li>
-    );
-    
-
-    return(
+    return (
         <div className="listUsers">
             <h1>All the users</h1>
             <ul>{listnames}</ul>
-            <h1>Only 18+</h1>
-            <ul>{listadults}</ul>
+            <h1>Only humans</h1>
+            <ul>{humans}</ul>
         </div>
-        
-    )
+    );
 }
 
 export default Mylist
