@@ -1,10 +1,11 @@
 import Myhook from "./hooks"
 import Mylist from "./lists"
 import Mycomponent from "./updatelist" 
+import { Todo } from "./Todo"
 
 function App() {
   return (<>
-    <Mycomponent></Mycomponent>
+    <Todo></Todo>
   </>)
 }
 
