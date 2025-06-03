@@ -1,32 +1,51 @@
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity,} from "react-native";
 import { useState } from "react";
+import Notelist from "../../components/Notelist";
+import AddNoteModal from "../../components/AddNoteModal";
 
 const NoteScreen = () => {
     const [notes, SetNotes] = useState([
-        {id:1, text: "Note One"},
-        {id:2, text: "Note Two"},
-        {id:3, text: "Note three"},
+        { id: 1, text: "Note One" },
+        { id: 2, text: "Note Two" },
+        { id: 3, text: "Note three" },
     ]);
+    //I have to use hooks to interact with the user
+    const [modalVisible, setModalVisible] = useState(false);
+    const [newNote, setNewNote] = useState("")
 
-  return (
-    <View style={styles.container}>
-        <FlatList
-            data={notes}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) =>(
-            <View style={styles.noteItem}>
-                <Text style={styles.noteItem}> {item.text} </Text>
-            </View>
-            )}
-        />
+    // Add New Note
+    function addNote() {
+        if (newNote.trim() === "") return
 
+        SetNotes((prevNotes) => [
+            ...prevNotes,
+            { id: Date.now.toString(), text: newNote}
+        ]);
 
-        <TouchableOpacity style={styles.addButton}>
-            <Text style={styles.addButtonText}>Add Note</Text>
-        </TouchableOpacity>
-    </View>
-  )
-}
+        setNewNote("")
+        setModalVisible(false)
+    }
+
+    return (
+        <View style={styles.container}>
+           <Notelist notes={notes} />
+
+            <TouchableOpacity style={styles.addButton} onPress={() =>
+                setModalVisible(true)}>
+                <Text style={styles.addButtonText}>Add Note</Text>
+            </TouchableOpacity>
+
+            {/*Model */}
+            <AddNoteModal 
+                modalVisible={modalVisible}
+                setModalVisible={setModalVisible}
+                newNote={newNote}
+                setNewNote={setNewNote}
+                addNote={addNote}
+            />
+        </View>
+    )
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -49,7 +68,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
     },
-})
-
+});
 
 export default NoteScreen;
