@@ -1,34 +1,62 @@
-import { View, Text, StyleSheet, TouchableOpacity,} from "react-native";
-import { useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity, Alert, } from "react-native";
+import { useState, useEffect} from "react";
 import Notelist from "../../components/Notelist";
 import AddNoteModal from "../../components/AddNoteModal";
+import { getbooks, postbook } from "@/services/bookServices"
 
 const NoteScreen = () => {
-    const [notes, SetNotes] = useState([
-        { id: 1, text: "Note One" },
-        { id: 2, text: "Note Two" },
-        { id: 3, text: "Note three" },
-    ]);
     //I have to use hooks to interact with the user
-    const [modalVisible, setModalVisible] = useState(false);
+    const [book, SetBooks] = useState([]);
+    const [pages, setPages] = useState();
     const [newNote, setNewNote] = useState("")
+    const [modalVisible, setModalVisible] = useState(false);
 
-    // Add New Note
-    function addNote() {
-        if (newNote.trim() === "") return
+    const [loading, setLoading] = useState(true)
+    const [error, setError ] = useState(null)
 
-        SetNotes((prevNotes) => [
-            ...prevNotes,
-            { id: Date.now.toString(), text: newNote}
-        ]);
+    useEffect(() => {
+        fetchbooks()
+    }, []);
 
-        setNewNote("")
-        setModalVisible(false)
+    const fetchbooks = async () => {
+        setLoading(true);
+        const res = await getbooks()
+        if (res.error){
+            setError(res.error)
+            Alert.alert("Error", res.error) //This will notify the user
+        } else{
+            SetBooks(res)
+            setError(null)
+        }
+        setLoading(false);
+    }
+
+    // This is post request to database 
+    async function addNote() {
+        if (newNote.trim() === "" || !pages) return
+
+        const res = await postbook({book_name: newNote, last_page: parseInt(pages)}) //My post request
+        console.log("Post Book Data:", res)
+
+        if (res.error){
+            setError(res.error)
+            Alert.alert("Error", res.error)
+        } else {
+            SetBooks((prevNotes) => [...prevNotes, res]);
+            setNewNote("")
+            setPages("")
+            setModalVisible(false)
+        }
     }
 
     return (
         <View style={styles.container}>
-           <Notelist notes={notes} />
+            <Text style={styles.subtitle}>
+                {loading && <Text>Loading...</Text>}
+                {error && <Text style={{color: 'red'}}>{error}</Text>}
+            </Text>
+
+            <Notelist book={book} />
 
             <TouchableOpacity style={styles.addButton} onPress={() =>
                 setModalVisible(true)}>
@@ -36,13 +64,15 @@ const NoteScreen = () => {
             </TouchableOpacity>
 
             {/*Model */}
-            <AddNoteModal 
+            <AddNoteModal
                 modalVisible={modalVisible}
                 setModalVisible={setModalVisible}
                 newNote={newNote}
                 setNewNote={setNewNote}
+                bookPages={pages}
+                setPages={setPages}
                 addNote={addNote}
-            />
+                />
         </View>
     )
 };

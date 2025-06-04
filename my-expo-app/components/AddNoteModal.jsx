@@ -6,6 +6,8 @@ const AddNoteModal = ({
     newNote,
     setNewNote,
     addNote,
+    bookPages,
+    setPages,
 }) => {
     return (
         <Modal
@@ -19,10 +21,17 @@ const AddNoteModal = ({
                     <Text style={styles.modalTitle}>Add a New Note</Text>
                     <TextInput
                         style={styles.input}
-                        placeholder="Enter note..."
+                        placeholder="Enter BookName..."
                         placeholderTextColor="#aaa"
                         value={newNote}
                         onChangeText={setNewNote}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter pages..."
+                        placeholderTextColor="#aaa"
+                        value={bookPages}
+                        onChangeText={setPages}
                     />
                     <View style={styles.modalButtons}>
                         <TouchableOpacity style={styles.cancelButton} onPress={

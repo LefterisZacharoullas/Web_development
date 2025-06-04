@@ -7,7 +7,7 @@ const HomeScreen = () => {
   const router = useRouter()
 
   return (
-    <View style= {styles.container}>
+    <View style={styles.container}>
       <Image source={favimage} style={styles.image}></Image>
       <Text style={styles.title}>Welcome to Notes App</Text>
       <Text style={styles.subtitle}>Capture your thoughts</Text>
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f8f9fa"
   },
   image: {
-    width: 100, 
+    width: 100,
     height: 100,
     margin: 20,
     borderRadius: 10,
