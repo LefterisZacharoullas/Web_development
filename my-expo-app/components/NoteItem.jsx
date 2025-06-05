@@ -1,24 +1,30 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Button } from "react-native";
 
-const NoteItem = ({ note }) => {
+const NoteItem = ({ note, deleteBook }) => {
     return (
         <View style={styles.noteItem}>
             <Text style={styles.NotesText}> {note.book_name} </Text>
+            <TouchableOpacity onPress={() => deleteBook(note.id)}>
+                <Text style={styles.deleteBook}>❌</Text>
+            </TouchableOpacity>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     NotesText: {
-        textAlign: "left",
         fontSize: 18,
         fontWeight: 'bold',
         color: '#555',
-        marginTop: 15,
     },
     noteItem: {
-        flex: 1,                    // allow it to fill space
-        borderColor: "grey",
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingVertical: 15,
+        paddingHorizontal: 10,
+    },
+    deleteBook: {
+        fontSize: 18,
     }
 });
 
