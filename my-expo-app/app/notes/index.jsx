@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import Notelist from "../../components/Notelist";
 import AddNoteModal from "../../components/AddNoteModal";
 import bookServices from "../../services/bookServices";
+import { useAuth } from "@/contexts/authContext";
+import { useRouter } from "expo-router";
 
 const NoteScreen = () => {
     //I have to use hooks to interact with the user
@@ -14,9 +16,19 @@ const NoteScreen = () => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
 
+    const router = useRouter();
+    const { isAuthenticated } = useAuth();
+
     useEffect(() => {
-        fetchbooks()
-    }, []);
+        if (!isAuthenticated) {
+            setError("You must be logged in to view notes.");
+            router.replace("/auth"); // Redirect to auth page if not authenticated
+            return;
+        } else {
+            fetchbooks();
+            setError(null);
+        }
+    }, [isAuthenticated]);
 
     const fetchbooks = async () => {
         setLoading(true);
@@ -78,11 +90,18 @@ const NoteScreen = () => {
         ])
     }
 
+    if (error) {
+        return (
+            <View style={styles.container}>
+                <Text style={{ color: 'red', fontSize: 16 }}>{error}</Text>
+            </View>
+        );
+    }
+
     return (
         <View style={styles.container}>
             <Text style={styles.subtitle}>
                 {loading && <Text>Loading...</Text>}
-                {error && <Text style={{ color: 'red' }}>{error}</Text>}
             </Text>
 
             <Notelist book={book} deleteBook={ondelete} />
