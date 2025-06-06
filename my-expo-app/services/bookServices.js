@@ -1,12 +1,13 @@
 import axios from 'axios';
 import { config } from "@/services/appwrite"
+import api from './api'; 
 
 const bookServices = {
 
   // Get all the books
   async getbooks(){
     try {
-      const response = await axios.get(`${config.endpoint}/books`);
+      const response = await api.get(`${config.endpoint}/user/books`);
       console.log("Succesfull Api", response.data)
       return response.data;
     } catch (error) {

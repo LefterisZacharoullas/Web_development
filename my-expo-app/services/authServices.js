@@ -42,24 +42,25 @@ const authServices = {
     }
   },
   // Register function
-  async register(username, password, email) {
+  async register(username, password) {
     if (!username || !password) {
       return { error: "Username and password are required." };
     }
     try {
-      const params = new URLSearchParams();
-      params.append("username", username);
-      params.append("password", password);
-      params.append("email", email || ""); // Optional email field
-
       const response = await axios.post(
         `${config.endpoint}/auth/signup`,
-        params,
-        { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
+        {
+          name: username,
+          surname: null,
+          email: null,
+          active: true,
+          password: password,
+        },
+        { headers: { "Content-Type": "application/json" } }
       );
-
       return { success: true, user: response.data };
     } catch (error) {
+      console.error("Full response data:", error.response.data);
       return { error: error.message };
     }
   }
